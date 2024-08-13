@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:idp-invoices-idp-api-100="http://www.mulesoft.org/schema/mule/idp-invoices-idp-api-100"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/idp-invoices-idp-api-100 http://www.mulesoft.org/schema/mule/idp-invoices-idp-api-100/current/mule-idp-invoices-idp-api-100.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f84b965e-1687-4bb4-b91f-2c7b32f05879" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<idp-invoices-idp-api-100:config name="IDP___invoices_idp_api___1_0_0_Config" doc:name="IDP - invoices-idp-api - 1.0.0 Config" doc:id="e9c49c4a-df2d-467d-879f-5c1246b0b4a8" property_port="443" />
+	<flow name="idp-pocFlow" doc:id="0b0f8233-291a-44b4-8d05-c4713cb05312" >
+		<http:listener doc:name="Listener" doc:id="7eba9ebd-fe51-4026-bee0-cbb51d1c9d57" config-ref="HTTP_Listener_config" path="/upload-doc" allowedMethods="POST"/>
+		<ee:transform doc:name="Transform Message" doc:id="50cac52b-c6b7-4656-b465-82d9e3e20ce3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<idp-invoices-idp-api-100:postdocumentactionexecution doc:name="postDocumentActionExecution" doc:id="49c11d1b-c482-4602-bd2a-de976c4a7155" config-ref="IDP___invoices_idp_api___1_0_0_Config"/>
+	</flow>
+	<flow name="idp-pocFlow1" doc:id="aeda9015-dc3b-46d3-b8da-bc2c98d9b728" >
+		<idp-invoices-idp-api-100:getdocumentactionexecution doc:name="getDocumentActionExecution" doc:id="4c78859c-785e-45c0-acac-6ee6096082e4" />
+	</flow>
+</mule>
