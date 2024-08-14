@@ -9,21 +9,39 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f84b965e-1687-4bb4-b91f-2c7b32f05879" >
 		<http:listener-connection host="0.0.0.0" port="${http.port}" />
 	</http:listener-config>
-	<idp-invoices-idp-api-100:config name="IDP___invoices_idp_api___1_0_0_Config" doc:name="IDP - invoices-idp-api - 1.0.0 Config" doc:id="e9c49c4a-df2d-467d-879f-5c1246b0b4a8" property_port="443" />
+	<idp-invoices-idp-api-100:config name="IDP___invoices_idp_api___1_0_0_Config" doc:name="IDP - invoices-idp-api - 1.0.0 Config" doc:id="e9c49c4a-df2d-467d-879f-5c1246b0b4a8" property_port="443" property_host="idp-rt.us-east-1.anypoint.mulesoft.com" property_protocol="HTTPS" property_client-id="952626a50c72455bacdf79ff5d825b5f" property_client-secret="55aCd48F785c4f6eBA3a08D501c05e6E"/>
 	<flow name="idp-pocFlow" doc:id="0b0f8233-291a-44b4-8d05-c4713cb05312" >
 		<http:listener doc:name="Listener" doc:id="7eba9ebd-fe51-4026-bee0-cbb51d1c9d57" config-ref="HTTP_Listener_config" path="/upload-doc" allowedMethods="POST"/>
 		<ee:transform doc:name="Transform Message" doc:id="50cac52b-c6b7-4656-b465-82d9e3e20ce3" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output multipart/form-data
+
 ---
-{
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<idp-invoices-idp-api-100:postdocumentactionexecution doc:name="postDocumentActionExecution" doc:id="49c11d1b-c482-4602-bd2a-de976c4a7155" config-ref="IDP___invoices_idp_api___1_0_0_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="53df79e0-3dfa-4a7e-b2d4-50c4cfb16a52" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
-	<flow name="idp-pocFlow1" doc:id="aeda9015-dc3b-46d3-b8da-bc2c98d9b728" >
-		<idp-invoices-idp-api-100:getdocumentactionexecution doc:name="getDocumentActionExecution" doc:id="4c78859c-785e-45c0-acac-6ee6096082e4" />
+	<flow name="idp-pocFlow1" doc:id="1372f135-2fcb-4e4c-882a-67b402b0c74e" >
+		<http:listener doc:name="Listener" doc:id="bf80b29a-9181-42b4-acc7-d3f7abea30a5" config-ref="HTTP_Listener_config" path="/get-doc"/>
+		<idp-invoices-idp-api-100:getdocumentactionexecution doc:name="getDocumentActionExecution" doc:id="11907a31-161d-412f-95e5-e31af68ae7d3" config-ref="IDP___invoices_idp_api___1_0_0_Config" execution-id="#[attributes.headers.docId]"/>
+		<ee:transform doc:name="Transform Message" doc:id="1385bffb-612c-4864-9ee1-ae2f10d6b82b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
+
 </mule>

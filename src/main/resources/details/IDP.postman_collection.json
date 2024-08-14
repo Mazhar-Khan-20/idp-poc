@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "fa00a4d7-c587-4833-a370-fab3248a719c",
+		"name": "IDP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MAZHAR/Downloads/bill.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://idp-invoices-api-esulje.2tku8l.usa-e1.cloudhub.io/upload-doc",
+					"protocol": "https",
+					"host": [
+						"idp-invoices-api-esulje",
+						"2tku8l",
+						"usa-e1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"upload-doc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "docId",
+						"value": "687c554c-4781-46a9-8d0b-a6211cd95acf",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://idp-invoices-api-esulje.2tku8l.usa-e1.cloudhub.io/get-doc",
+					"protocol": "https",
+					"host": [
+						"idp-invoices-api-esulje",
+						"2tku8l",
+						"usa-e1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"get-doc"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
